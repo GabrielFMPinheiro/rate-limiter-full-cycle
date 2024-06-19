@@ -1,6 +1,9 @@
 package cache
 
-import "strconv"
+import (
+	"strconv"
+	"time"
+)
 
 // Mock implementation for cache.RateLimiterCache
 type MockCache struct {
@@ -47,4 +50,9 @@ func (m *MockCache) Delete(key string) error {
 
 func (m *MockCache) ControlExpirationTime(key string) {
 	// Mock implementation, no-op for testing
+}
+
+func (m *MockCache) Set(key string, value string, expiration time.Duration) error {
+	m.Data[key] = value
+	return nil
 }

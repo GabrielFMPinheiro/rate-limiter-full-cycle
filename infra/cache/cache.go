@@ -61,3 +61,7 @@ func (c *Cache) ControlExpirationTime(limiterKey string) {
 		}
 	}
 }
+
+func (c *Cache) Set(key string, value string, expiration time.Duration) error {
+	return c.client.Set(key, value, expiration).Err()
+}

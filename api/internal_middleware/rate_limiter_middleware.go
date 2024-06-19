@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/GabrielFMPinheiro/rate-limiter-full-cycle/infra/cache"
 	"github.com/GabrielFMPinheiro/rate-limiter-full-cycle/infra/utilities"
@@ -103,12 +104,18 @@ func (r *RateLimiterMiddleware) checkRateLimit(w http.ResponseWriter, limiterKey
 		return true
 	}
 
+	if limiterKeyAmount == "blocked" {
+		http.Error(w, "you have reached the maximum number of requests or actions allowed within a certain time frame", http.StatusTooManyRequests)
+		return true
+	}
+
 	limiterKeyAmountInt, err := strconv.ParseInt(limiterKeyAmount, 10, 64)
 	if err != nil {
 		limiterKeyAmountInt = 0
 	}
 
 	if limiterKeyAmountInt >= limit {
+		r.Block(limiterKey)
 		http.Error(w, "you have reached the maximum number of requests or actions allowed within a certain time frame", http.StatusTooManyRequests)
 		return true
 	}
@@ -120,4 +127,8 @@ func (r *RateLimiterMiddleware) checkRateLimit(w http.ResponseWriter, limiterKey
 	}
 
 	return false
+}
+
+func (r *RateLimiterMiddleware) Block(limiterKey string) {
+	r.cache.Set(limiterKey, "blocked", time.Minute)
 }
