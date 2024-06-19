@@ -9,11 +9,12 @@ services:
     volumes:
       - redis_data:/data
 
-  web:
+  api:
     build:
       context: .
       # Correct the path to your Dockerfile
       dockerfile: Dockerfile
+    container_name: api
     ports:
       - 8080:8080
     # Important to bind/mount your codebase dir to /app dir for live reload

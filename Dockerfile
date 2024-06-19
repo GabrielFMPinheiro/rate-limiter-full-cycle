@@ -2,6 +2,8 @@ FROM golang:1.22-alpine
 
 WORKDIR /app
 
+RUN apk update && apk add --no-cache make git bash
+
 RUN go install github.com/air-verse/air@latest
 
 RUN chmod 755 /app
