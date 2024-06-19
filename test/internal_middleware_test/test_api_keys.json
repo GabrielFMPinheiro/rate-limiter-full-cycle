@@ -1,0 +1,4 @@
+[
+  { "key": "key1", "limitRequestPerSecond": 10, "id": 1 },
+  { "key": "key2", "limitRequestPerSecond": 20, "id": 2 }
+]
