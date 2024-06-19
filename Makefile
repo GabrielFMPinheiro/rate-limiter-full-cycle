@@ -2,7 +2,7 @@
 
 # Executa os testes
 test:
-	go test ./...
+	go test ./... -v
 
 # Executa o aplicativo
 run:
