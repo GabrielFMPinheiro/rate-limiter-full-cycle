@@ -36,8 +36,10 @@
 
  1. Basta disparar para a rota localhost:8080 com método GET
  2. O valor padrão de requisições por segundo são 5
+ 3. Caso alcançar o limite de requisições o IP é bloqueado por 1 minuto
 
 
 **Por API Key:**
  1. Basta disparar para a rota localhost:8080 com método GET e header API_KEY e alguma API Key encontrada no arquivo api-key.json, utilizar o valor da propriedade key. 
 2. Cada API Key no arquivo api-key.json possui seu número máximo de requisições por segundo
+3. Caso alcançar o limite de requisições a API Key é bloqueada por 1 minuto
