@@ -22,7 +22,7 @@ type ApiKey struct {
 type RateLimiterMiddleware struct {
 	cache                   cache.RateLimiterCache
 	requestTimeLimitDefault int64
-	ApiKeys                 []ApiKey
+	apiKeys                 []ApiKey
 }
 
 var GetWd = os.Getwd
@@ -33,7 +33,7 @@ func NewRateLimiterMiddleware(cache cache.RateLimiterCache, requestTimeLimitDefa
 	return &RateLimiterMiddleware{
 		cache:                   cache,
 		requestTimeLimitDefault: requestTimeLimitDefault,
-		ApiKeys:                 apiKeys,
+		apiKeys:                 apiKeys,
 	}
 }
 
@@ -60,7 +60,7 @@ func LoadApiKeys(apiKeyPath string) []ApiKey {
 }
 
 func (r *RateLimiterMiddleware) findApiKey(apiKey string) (*ApiKey, bool) {
-	for _, key := range r.ApiKeys {
+	for _, key := range r.apiKeys {
 		if key.Key == apiKey {
 			return &key, true
 		}
