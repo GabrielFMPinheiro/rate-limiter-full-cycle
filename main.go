@@ -3,8 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 
 	internalMiddleware "github.com/GabrielFMPinheiro/rate-limiter-full-cycle/api/internal_middleware"
 	"github.com/GabrielFMPinheiro/rate-limiter-full-cycle/infra/cache"
@@ -21,13 +19,7 @@ func main() {
 
 	cache := cache.NewCache()
 
-	limitRequestPerSecondDefault, err := strconv.ParseInt(os.Getenv("LIMIT_REQUEST_PER_SECOND_DEFAULT"), 10, 64)
-
-	if err != nil {
-		limitRequestPerSecondDefault = 10
-	}
-
-	rateLimiter := internalMiddleware.NewRateLimiterMiddleware(cache, limitRequestPerSecondDefault, "api-key.json")
+	rateLimiter := internalMiddleware.NewRateLimiterMiddleware(cache, "api-key.json")
 
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
@@ -37,7 +29,6 @@ func main() {
 	r.Use(rateLimiter.Middleware)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-
 		w.Write([]byte("welcome"))
 	})
 	log.Fatal(http.ListenAndServe(":8080", r))

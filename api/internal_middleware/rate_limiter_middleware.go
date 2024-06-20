@@ -27,12 +27,18 @@ type RateLimiterMiddleware struct {
 
 var GetWd = os.Getwd
 
-func NewRateLimiterMiddleware(cache cache.RateLimiterCache, requestTimeLimitDefault int64, apiKeyPath string) *RateLimiterMiddleware {
+func NewRateLimiterMiddleware(cache cache.RateLimiterCache, apiKeyPath string) *RateLimiterMiddleware {
 	apiKeys := LoadApiKeys(apiKeyPath)
+
+	limitRequestPerSecondDefault, err := strconv.ParseInt(os.Getenv("LIMIT_REQUEST_PER_SECOND_DEFAULT"), 10, 64)
+
+	if err != nil {
+		limitRequestPerSecondDefault = 10
+	}
 
 	return &RateLimiterMiddleware{
 		cache:                   cache,
-		requestTimeLimitDefault: requestTimeLimitDefault,
+		requestTimeLimitDefault: limitRequestPerSecondDefault,
 		apiKeys:                 apiKeys,
 	}
 }

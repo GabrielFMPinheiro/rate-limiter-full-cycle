@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Número total de requisições
-total_requests=51
+total_requests=11
 
 # URL do endpoint
 endpoint="http://localhost:8080/"
@@ -15,5 +15,5 @@ for ((i = 1; i <= total_requests; i++)); do
     curl -X GET "$endpoint" -H "API_KEY: $api_key" -w "\n" &
     
     # Aguarda 300ms (0.3 segundos) antes da próxima requisição
-    sleep 0.3
+    sleep 0
 done

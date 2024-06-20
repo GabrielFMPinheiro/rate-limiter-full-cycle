@@ -3,6 +3,7 @@ package internal_middleware_test
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strconv"
 	"testing"
 
@@ -14,7 +15,10 @@ func TestRateLimiterMiddlewareByIP(t *testing.T) {
 	cache := &cache.MockCache{
 		Data: make(map[string]string),
 	}
-	middleware := internal_middleware.NewRateLimiterMiddleware(cache, 5, "./test_api_keys.json")
+
+	os.Setenv("LIMIT_REQUEST_PER_SECOND_DEFAULT", "5")
+
+	middleware := internal_middleware.NewRateLimiterMiddleware(cache, "./test_api_keys.json")
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -42,7 +46,9 @@ func TestRateLimiterMiddlewareByAPIKey(t *testing.T) {
 	cache := &cache.MockCache{
 		Data: make(map[string]string),
 	}
-	middleware := internal_middleware.NewRateLimiterMiddleware(cache, 10, "./test_api_keys.json")
+
+	os.Setenv("LIMIT_REQUEST_PER_SECOND_DEFAULT", "10")
+	middleware := internal_middleware.NewRateLimiterMiddleware(cache, "./test_api_keys.json")
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -68,7 +74,9 @@ func TestRateLimiterMiddlewareByAPIKey(t *testing.T) {
 
 func TestRateLimiterMiddlewareByAPIKeyNotFound(t *testing.T) {
 	cache := &cache.MockCache{Data: make(map[string]string)}
-	middleware := internal_middleware.NewRateLimiterMiddleware(cache, 5, "./test_api_keys.json")
+	os.Setenv("LIMIT_REQUEST_PER_SECOND_DEFAULT", "5")
+
+	middleware := internal_middleware.NewRateLimiterMiddleware(cache, "./test_api_keys.json")
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -96,7 +104,9 @@ func TestRateLimiterIfBlockTheUserWhenTheLimitIsReached(t *testing.T) {
 	cache := &cache.MockCache{
 		Data: make(map[string]string),
 	}
-	middleware := internal_middleware.NewRateLimiterMiddleware(cache, 10, "./test_api_keys.json")
+	os.Setenv("LIMIT_REQUEST_PER_SECOND_DEFAULT", "10")
+
+	middleware := internal_middleware.NewRateLimiterMiddleware(cache, "./test_api_keys.json")
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
