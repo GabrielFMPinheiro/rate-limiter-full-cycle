@@ -16,9 +16,8 @@
     OBRIGATÓRIO CASO NÃO QUEIRA USAR O AIR)
  3. go mod download
  4. Copie e cole o arquivo .env.example e mude o nome para .env
- 5. make run (outra opção também é usar o comando: air server --port
-    8080 caso tenha o air instalado do passo 1 ou o simples comando go
-    run main.go)
+ 5. Caso tenha o air instalado do passo 1: make run (outra opção também é usar o comando: air server --port
+    8080). Caso não tenha o air instalado: go run main.go)
 
 ## Como rodar testes:
 
@@ -30,7 +29,8 @@
   
  **Terminal:**
 
- 1. make test (outra opção também é usar o próprio go test ./... -v)
+ 1. Utilizar o comando: docker compose up redis -d
+ 2. make test (outra opção também é usar o próprio go test ./... -v)
 
 ## Como utilizar o limitador de requisições:
 
