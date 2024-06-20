@@ -13,7 +13,7 @@
  1. Utilizar o comando: docker compose up redis -d
  2. Instale o air na sua máquina para utilizar o mecanismo de hot
     reloading: go install github.com/air-verse/air@latest (NÃO
-    OBRIGATÓRIO)
+    OBRIGATÓRIO CASO NÃO QUEIRA USAR O AIR)
  3. go mod download
  4. Copie e cole o arquivo .env.example e mude o nome para .env
  5. make run (outra opção também é usar o comando: air server --port
