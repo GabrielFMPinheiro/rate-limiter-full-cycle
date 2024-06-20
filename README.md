@@ -36,12 +36,14 @@
 1.  Basta disparar para a rota localhost:8080 com método GET
 2.  O valor padrão de requisições por segundo são 5
 3.  Caso alcançar o limite de requisições o IP é bloqueado por 1 minuto
+4.  Caso queira alterar o número máximo de requisições ou o tempo de bloqueio, basta mudar as envs LIMIT_REQUEST_PER_SECOND_DEFAULT e CACHE_EXPIRATION respectivamente
 
 **Por API Key:**
 
-1. Basta disparar para a rota localhost:8080 com método GET e header API_KEY e alguma API Key encontrada no arquivo api-key.json, utilizar o valor da propriedade key.
+1. Basta disparar para a rota localhost:8080 com método GET e header API_KEY e alguma API Key encontrada no arquivo api-key.json, utilizar o valor da propriedade key
 2. Cada API Key no arquivo api-key.json possui seu número máximo de requisições por segundo
 3. Caso alcançar o limite de requisições a API Key é bloqueada por 1 minuto
+4. Caso queira alterar o número máximo de requisições ou o tempo de bloqueio, basta mudar a propriedade limitRequestPerSecond no arquivo api-key.json para a key utilizada e a env CACHE_EXPIRATION respectivamente
 
 ## Dica:
 
