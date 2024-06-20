@@ -130,5 +130,16 @@ func (r *RateLimiterMiddleware) checkRateLimit(w http.ResponseWriter, limiterKey
 }
 
 func (r *RateLimiterMiddleware) Block(limiterKey string) {
-	r.cache.Set(limiterKey, "blocked", time.Minute)
+	cacheExpirationStr := os.Getenv("CACHE_EXPIRATION")
+
+	if cacheExpirationStr == "" {
+		cacheExpirationStr = "1m" // valor padrão: 1 minuto
+	}
+
+	cacheExpiration, err := time.ParseDuration(cacheExpirationStr)
+	if err != nil {
+		log.Fatalf("Erro ao converter a duração do cache: %v", err)
+	}
+
+	r.cache.Set(limiterKey, "blocked", cacheExpiration)
 }

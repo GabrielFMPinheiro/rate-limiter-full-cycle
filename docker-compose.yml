@@ -12,15 +12,12 @@ services:
   api:
     build:
       context: .
-      # Correct the path to your Dockerfile
       dockerfile: Dockerfile
     container_name: api
     ports:
       - 8080:8080
-    # Important to bind/mount your codebase dir to /app dir for live reload
-    environment:
-      - REDIS_ADDR=redis:6379
-      - LIMIT_REQUEST_PER_SECOND_DEFAULT=5
+    env_file:
+      - .env.docker
     volumes:
       - ./:/app
     depends_on:

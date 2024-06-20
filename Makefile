@@ -6,4 +6,4 @@ test:
 
 # Executa o aplicativo
 run:
-	air server --port 8080
+	go run main.go
