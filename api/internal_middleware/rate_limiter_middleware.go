@@ -14,15 +14,15 @@ import (
 )
 
 type ApiKey struct {
-	Key                   string `json:"key"`
-	LimitRequestPerSecond int64  `json:"limitRequestPerSecond"`
-	Id                    int64  `json:"id"`
+	Key string `json:"key"`
+	Id  int64  `json:"id"`
 }
 
 type RateLimiterMiddleware struct {
-	cache                   cache.RateLimiterCache
-	requestTimeLimitDefault int64
-	apiKeys                 []ApiKey
+	cache               cache.RateLimiterCache
+	requestLimitDefault int64
+	requestLimitApiKey  int64
+	apiKeys             []ApiKey
 }
 
 var GetWd = os.Getwd
@@ -33,13 +33,24 @@ func NewRateLimiterMiddleware(cache cache.RateLimiterCache, apiKeyPath string) *
 	limitRequestPerSecondDefault, err := strconv.ParseInt(os.Getenv("LIMIT_REQUEST_PER_SECOND_DEFAULT"), 10, 64)
 
 	if err != nil {
+		limitRequestPerSecondDefault = 5
+	}
+
+	limitRequestPerSecondApiKey, err := strconv.ParseInt(os.Getenv("LIMITER_REQUEST_PER_SECOND_API_KEY"), 10, 64)
+
+	if err != nil {
+		limitRequestPerSecondDefault = 10
+	}
+
+	if err != nil {
 		limitRequestPerSecondDefault = 10
 	}
 
 	return &RateLimiterMiddleware{
-		cache:                   cache,
-		requestTimeLimitDefault: limitRequestPerSecondDefault,
-		apiKeys:                 apiKeys,
+		cache:               cache,
+		requestLimitApiKey:  limitRequestPerSecondApiKey,
+		requestLimitDefault: limitRequestPerSecondDefault,
+		apiKeys:             apiKeys,
 	}
 }
 
@@ -83,7 +94,7 @@ func (r *RateLimiterMiddleware) Middleware(next http.Handler) http.Handler {
 		if apiKey != "" {
 			if key, found := r.findApiKey(apiKey); found {
 				limiterKeyByApiKey := "rate-limiter:" + strconv.FormatInt(key.Id, 10)
-				if r.checkRateLimit(w, limiterKeyByApiKey, key.LimitRequestPerSecond) {
+				if r.checkRateLimit(w, limiterKeyByApiKey, r.requestLimitApiKey) {
 					return
 				}
 
@@ -93,7 +104,7 @@ func (r *RateLimiterMiddleware) Middleware(next http.Handler) http.Handler {
 			}
 		}
 
-		if r.checkRateLimit(w, limiterKeyByIp, r.requestTimeLimitDefault) {
+		if r.checkRateLimit(w, limiterKeyByIp, r.requestLimitDefault) {
 			return
 		}
 

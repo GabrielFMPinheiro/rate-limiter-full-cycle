@@ -17,6 +17,7 @@ func TestRateLimiterMiddlewareByIP(t *testing.T) {
 	}
 
 	os.Setenv("LIMIT_REQUEST_PER_SECOND_DEFAULT", "5")
+	os.Setenv("LIMITER_REQUEST_PER_SECOND_API_KEY", "10")
 
 	middleware := internal_middleware.NewRateLimiterMiddleware(cache, "./test_api_keys.json")
 
@@ -48,6 +49,8 @@ func TestRateLimiterMiddlewareByAPIKey(t *testing.T) {
 	}
 
 	os.Setenv("LIMIT_REQUEST_PER_SECOND_DEFAULT", "10")
+	os.Setenv("LIMITER_REQUEST_PER_SECOND_API_KEY", "10")
+
 	middleware := internal_middleware.NewRateLimiterMiddleware(cache, "./test_api_keys.json")
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -105,6 +108,7 @@ func TestRateLimiterIfBlockTheUserWhenTheLimitIsReached(t *testing.T) {
 		Data: make(map[string]string),
 	}
 	os.Setenv("LIMIT_REQUEST_PER_SECOND_DEFAULT", "10")
+	os.Setenv("LIMITER_REQUEST_PER_SECOND_API_KEY", "10")
 
 	middleware := internal_middleware.NewRateLimiterMiddleware(cache, "./test_api_keys.json")
 

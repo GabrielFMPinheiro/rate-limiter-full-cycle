@@ -43,7 +43,7 @@
 1. Basta disparar para a rota localhost:8080 com método GET e header API_KEY e alguma API Key encontrada no arquivo api-key.json, utilizar o valor da propriedade key
 2. Cada API Key no arquivo api-key.json possui seu número máximo de requisições por segundo
 3. Caso alcançar o limite de requisições a API Key é bloqueada por 1 minuto
-4. Caso queira alterar o número máximo de requisições ou o tempo de bloqueio, basta mudar a propriedade limitRequestPerSecond no arquivo api-key.json para a key utilizada e a env CACHE_EXPIRATION respectivamente
+4. Caso queira alterar o número máximo de requisições ou o tempo de bloqueio, basta mudar as envs LIMITER_REQUEST_PER_SECOND_API_KEY e CACHE_EXPIRATION respectivamente
 
 ## Dica:
 
