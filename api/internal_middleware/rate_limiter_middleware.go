@@ -39,11 +39,7 @@ func NewRateLimiterMiddleware(cache cache.RateLimiterCache, apiKeyPath string) *
 	limitRequestPerSecondApiKey, err := strconv.ParseInt(os.Getenv("LIMITER_REQUEST_PER_SECOND_API_KEY"), 10, 64)
 
 	if err != nil {
-		limitRequestPerSecondDefault = 10
-	}
-
-	if err != nil {
-		limitRequestPerSecondDefault = 10
+		limitRequestPerSecondApiKey = 10
 	}
 
 	return &RateLimiterMiddleware{
